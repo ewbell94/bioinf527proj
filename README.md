@@ -1,4 +1,4 @@
-#Recalculation of BLOSUM using modern sequence data
+# Recalculation of BLOSUM using modern sequence data
 
 Files in this Repository:
 + **1234.txt** results from homologsearch.py for seed 1234
