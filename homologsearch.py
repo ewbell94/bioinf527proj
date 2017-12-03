@@ -5,7 +5,7 @@ import random
 from multiprocessing.dummy import Pool as ThreadPool
 import time
 
-Nprots=500
+Nprots=1000
 mats=["randblos.mat","blosum62.mat","new99.mat"]
 
 f=open("astral-scopedom-seqres-gd-sel-gs-bib-40-2.06.fa")
