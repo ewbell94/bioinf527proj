@@ -1,6 +1,8 @@
 # Recalculation of BLOSUM using modern sequence data
 
 Files in this Repository:
++ **blosum/** Adjusted BLOSUM source code from the original Henikoff paper, updated to make it work 
++ **protomat/** Adjusted Protomat source code from the original Henikoff paper, updated to make it work 
 + **1234.txt** results from homologsearch.py for seed 1234
 + **5678.txt** results from homologsearch.py for seed 5678
 + **9001.txt** results from homologsearch.py for seed 9001
