@@ -7,10 +7,13 @@ accmat<-as.data.frame(matrix(ncol=3,nrow=3))
 precmat<-as.data.frame(matrix(ncol=3,nrow=3))
 recmat<-as.data.frame(matrix(ncol=3,nrow=3))
 meanmat<-as.data.frame(matrix(ncol=3,nrow=3))
+stderrmat<-as.data.frame(matrix(ncol=3,nrow=3))
 rownames(meanmat)<-labels
+rownames(stderrmat)<-labels
 rownames(accmat)<-labels
 rownames(precmat)<-labels
 rownames(recmat)<-labels
+colnames(stderrmat)<-colnames(blosum62)
 colnames(meanmat)<-colnames(blosum62)
 colnames(accmat)<-labels
 colnames(precmat)<-labels
@@ -20,8 +23,12 @@ for(i in 1:3){
       meanmat[i,1]<-mean(mats[3*(i-1)+1]$accuracy)
       meanmat[i,2]<-mean(mats[3*(i-1)+2]$precision)
       meanmat[i,3]<-mean(mats[3*(i-1)+3]$recall)
+      stderrmat[i,1]<-sd(mats[3*(i-1)+1]$accuracy)/sqrt(3)
+      stderrmat[i,2]<-sd(mats[3*(i-1)+2]$precision)/sqrt(3)
+      stderrmat[i,3]<-sd(mats[3*(i-1)+3]$recall)/sqrt(3)
 }
 meanmat
+stderrmat
 
 for(i in 2:3){
       for(j in 1:(i-1)){
