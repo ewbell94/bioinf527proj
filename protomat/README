@@ -1,0 +1,90 @@
+3 March 1998
+
+                         PROTOMAT 10.0 Programs
+
+	The compressed tar file "protomat.tar.Z" contains the source code
+for the UNIX versions of the PROTOMAT programs documented in "protomat.doc",
+except for the "results" program which has not been modified to run on UNIX
+systems. To request the DOS version is no longer supported.
+
+	Please note that these programs are copyrighted by the Fred Hutchinson
+Cancer Research Center and any copy of them must include the copyright notice.
+Redistribution for profit requires the express, written permission of FHCRC.
+If you find the programs useful, please cite:
+
+        S.Henikoff and J.Henikoff, NAR 19:23, 6565-6572 (1991).
+
+	These are the program versions used to created version 10.0 of the 
+blocks database based on PROSITE 14.0. Since the examples presented in our
+paper were taken from version 3.0 of the blocks database based on PROSITE 7.0
+and used older versions of the programs, results may differ.
+
+	Although the basic algorithms for the motif finder (motifj program) and
+motif assembler (motomat program) remain the same, major adjustments were made 
+to the PROTOMAT programs for this release with the intention of improving
+the results, first by saving fewer motifs spread along more of the
+sequence lengths (motifj), and secondly by the reducing competition between
+overlapping motifs during assembly (motomat). We also now run a new 
+program (addseqs) to add related sequences excluded from the blocks by
+PROTOMAT back into the blocks: these sequences are added only if they
+can be aligned with all of the blocks in the correct order using the
+BLIMPS searching procedure.
+
+	The programs require a standard C compiler. In order to prepare them
+for use, follow these steps:
+
+	1. ftp ncbi.nlm.nih.gov/repository/blocks/unix/protomat/protomat.tar.Z
+	2. uncompress protomat.tar.Z
+        3. tar -xvf protomat.tar
+        4. make protomat
+	5. cccb.csh addseqs, blweight, blalign, cobbler
+
+The Makefile should compile 5 programs. They are:
+	protomot	Reads prosite.dat and makes lists of sequences for
+			protein groups.
+	uextract	Extracts the lists of sequences from SWISS-PROT
+			and executes motifj.
+	motifj		Motif finder. Executes motomat.
+	motomat		Motif assembler; produces blocks.
+	matodat		Calibrates blocks (requires that the blocks be
+			searched vs SWISS-PROT using BLIMPS first).
+
+The cccb.csh shell can be used to compile programs requiring the BLIMPS
+libraries:
+	addseqs		Tries to add sequences to blocks.
+	blweight	Adds sequence weights to blocks.
+	blalign		Utility to read blocks, list sequence segments, etc.
+	cobbler		Makes COBBLER sequence from blocks.
+
+Obtain BLIMPS from:
+	ftp ncbi.nlm.nih.gov/repository/blocks/unix/blimps/blimps-#.tar.Z
+
+Sample shells to execute the programs are included, look for *.csh.
+The Blocks Database is made by running protomot.csh, then uextract.csh:
+PS00094.csh runs motifj and motomat for the cytosine methylases.
+A sample Block Maker run, with user-supplied proteins instead of using
+a PROSITE group, is "blockmaker.csh example/lipo".
+
+
+KNOWN PROBLEMS:  The "uextract" program only extracts sequences reliably from 
+a database in typical "fasta" format, with a one line title starting with ">".
+It will extract sequences from the EMBL CDROM file /cdrom/pirform/swiss.seq,
+but it cannot tell which sequences are fragments . It has problems extracting
+sequences from a database in which the IDs are not in sorted order. YOU MUST
+VERIFY THAT SEQUENCES EXTRACTED WITH UEXTRACT, OR PREPARED IN ANY OTHER WAY,
+HAVE BEEN FORMATTED CORRECTLY, see the examples in the PS00094 sub-directory
+included with the tar file.
+	PROTOMAT tends to give mediocre results for very large groups with a
+large number of repeats (e.g. PS00018 and PS00022). The programs have hard
+limits on the maximum number of sequences and repeats (MAXSEQS and MAXFREQ
+in motifj.h), so in order to process very large groups we recommend purging
+the sequence set (using Andy Neuwald's "purge" program for instance) down
+to 400 sequences, and adding the remaining sequences to the resulting blocks
+using the new addseqs program. 
+
+-----------------------------------------------------------------------------
+Jorja and Steven Henikoff
+Howard Hughes Medical Institute/Fred Hutchinson Cancer Research Center
+1100 Fairview AV N, A1-111, Seattle, WA 98109
+Telephone: (206) 667-4515, FAX: (206) 667-5889
+Email: henikoff@muller.fhcrc.org

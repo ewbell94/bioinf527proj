@@ -1,0 +1,48 @@
+              **BLOCKS from MOTIF**
+ 
+
+Cannot open file pros/lipo.mblks
+
+
+      **COBBLER sequence from MOTIF**
+              **BLOCKS from MOTIF**
+ 
+>lipoxxx none
+5 sequences are included in 2 blocks
+
+            lipoxxxA, width = 14lipoxxxB, width = 11     
+ BBP_PIEBR    16 NFDWSNYHGKWWEV (  71)   101 VLSTDNKNYII
+ICYA_MANSE    17 DFDLSAFAGAWHEI (  74)   105 VLATDYKNYAI
+LACB_BOVIN    25 GLDIQKVAGTWYSL (  71)   110 VLDTDYKKYLL
+MUP2_MOUSE    27 NFNVEKINGEWHTI (  69)   110 IPKTDYDNFLM
+RETB_BOVIN    14 NFDKARFAGTWYAM (  78)   106 IIDTDYETFAV
+
+
+      **COBBLER sequence from MOTIF**
+>lipoxxx ICYA_MANSE from 1 to 189 with embedded consensus blocks
+gdifypgycpdvkpvnNFDVSKFAGTWYEIaklplenenqgkctiaeykydgkkasvynsfvsngvkeymegdleiapda
+kytkqgkyvmtfkfgqrvvnlvpwVLDTDYKNYLInyncdyhpdkkahsihawilskskvlegntkevvdnvlktfshli
+daskfisndfseaacqysttysltgpdrh
+
+
+     **BLOCKS in searchable format**
+ID   none; BLOCK
+AC   lipoxxxA; distance from previous block=(13,26)
+DE   none
+BL   DWA motif=[4,0,17] motomat=[1,1,-10]  width=14; seqs=5; 99.5%=660; strength=884
+ BBP_PIEBR (  16) NFDWSNYHGKWWEV  93
+ICYA_MANSE (  17) DFDLSAFAGAWHEI  80
+LACB_BOVIN (  25) GLDIQKVAGTWYSL 100
+MUP2_MOUSE (  27) NFNVEKINGEWHTI 100
+RETB_BOVIN (  14) NFDKARFAGTWYAM  81
+//
+ID   none; BLOCK
+AC   lipoxxxB; distance from previous block=(69,78)
+DE   none
+BL   TDY motif=[4,0,17] motomat=[1,1,-10]  width=11; seqs=5; 99.5%=646; strength=858
+ BBP_PIEBR ( 101) VLSTDNKNYII  89
+ICYA_MANSE ( 105) VLATDYKNYAI  68
+LACB_BOVIN ( 110) VLDTDYKKYLL  76
+MUP2_MOUSE ( 110) IPKTDYDNFLM  96
+RETB_BOVIN ( 106) IIDTDYETFAV 100
+//

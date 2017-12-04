@@ -1,0 +1,430 @@
+
+MOTIFJ Version 11/ 7/97.2
+Please cite Hamilton O. Smith, et al, PNAS 87 (1990), pp. 826-830.
+
+Using BLOSUM62 scoring matrix.
+
+Using RunType=4
+Reading batch file lsts/PS00094.lst
+>PS00094 ;C5_MTASE_1;C-5 cytosine-specific DNA methylases active site.; MOTIFJ=[4,45,0,1];$
+
+Sequence #1:	DCM_ECOLI		Length of sequence #1 =  472
+Sequence #2:	MTA1_ARTLU		Length of sequence #2 =  521
+Sequence #3:	MTAA_SYNP2		Length of sequence #3 =  248
+Sequence #4:	MTB1_BACSH		Length of sequence #4 =  424
+Sequence #5:	MTB1_BREEP		Length of sequence #5 =  403
+Sequence #6:	MTB1_HERAU		Length of sequence #6 =  437
+Sequence #7:	MTB6_BACSP		Length of sequence #7 =  315
+Sequence #8:	MTBA_BACAR		Length of sequence #8 =  428
+Sequence #9:	MTBF_BACSU		Length of sequence #9 =  409
+Sequence #10:	MTBP_BPPHT		Length of sequence #10 =  443
+Sequence #11:	MTBR_BACSU		Length of sequence #11 =  436
+Sequence #12:	MTBR_BPRH1		Length of sequence #12 =  503
+Sequence #13:	MTBS_BPSPR		Length of sequence #13 =  439
+Sequence #14:	MTC1_CHVI3		Length of sequence #14 =  367
+Sequence #15:	MTC1_HERAU		Length of sequence #15 =  420
+Sequence #16:	MTC2_HERAU		Length of sequence #16 =  437
+Sequence #17:	MTD1_DESDN		Length of sequence #17 =  415
+Sequence #18:	MTD1_HERAU		Length of sequence #18 =  309
+Sequence #19:	MTD2_HERAU		Length of sequence #19 =  354
+Sequence #20:	MTDM_ARATH		Length of sequence #20 =  1534
+Sequence #21:	MTDM_HUMAN		Length of sequence #21 =  1495
+Sequence #22:	MTDM_MOUSE		Length of sequence #22 =  1502
+Sequence #23:	MTDX_HAEIN		Length of sequence #23 =  304
+Sequence #24:	MTE1_HERAU		Length of sequence #24 =  437
+Sequence #25:	MTE2_ECOLI		Length of sequence #25 =  477
+Sequence #26:	MTF1_FUSNU		Length of sequence #26 =  344
+Sequence #27:	MTG1_HAEGA		Length of sequence #27 =  357
+Sequence #28:	MTG2_HAEGA		Length of sequence #28 =  358
+Sequence #29:	MTH1_HAEHA		Length of sequence #29 =  327
+Sequence #30:	MTH2_HAEPA		Length of sequence #30 =  358
+Sequence #31:	MTH3_HAEAE		Length of sequence #31 =  330
+Sequence #32:	MTHT_METTF		Length of sequence #32 =  330
+Sequence #33:	MTM1_MORSP		Length of sequence #33 =  418
+Sequence #34:	MTNG_NEIGO		Length of sequence #34 =  330
+Sequence #35:	MTNM_NEIGO		Length of sequence #35 =  312
+Sequence #36:	MTNX_NEILA		Length of sequence #36 =  313
+Sequence #37:	MTS2_SHISO		Length of sequence #37 =  379
+Sequence #38:	MTS3_STAAU		Length of sequence #38 =  412
+Sequence #39:	MTS9_STAAU		Length of sequence #39 =  430
+Sequence #40:	MTSA_LACLC		Length of sequence #40 =  389
+Sequence #41:	MTSB_LACLC		Length of sequence #41 =  360
+Sequence #42:	MTSI_SALIN		Length of sequence #42 =  461
+Sequence #43:	MTSI_SPISQ		Length of sequence #43 =  386
+
+  A     R     N     D     C     Q     E     G     H     I     L     K     M     F     P     S     T     W     Y     V   
+ 1217  1194  1050  1162   288   798  1450  1431   410  1344  1623  1497   358  1059  1017  1215   919   207   712  1172 
+0.060 0.059 0.052 0.058 0.014 0.040 0.072 0.071 0.020 0.067 0.081 0.074 0.018 0.053 0.051 0.060 0.046 0.010 0.035 0.058 
+Total amino acids in 43 proteins: 20123
+
+Allocating and initializing arrays...
+
+RunType = 4, Normalized drop score = 0
+Motif parameters = [23, 0, 17] with shuffled sequences.
+....................
+
+
+CPU time to find and sort motifs: 8 seconds.
+Found 0 motifs.
+Starting motifj...
+
+MOTIFJ Version 11/ 7/97.2
+Please cite Hamilton O. Smith, et al, PNAS 87 (1990), pp. 826-830.
+
+Using BLOSUM62 scoring matrix.
+
+Using RunType=3
+Reading batch file lsts/PS00094.lst
+>PS00094 ;C5_MTASE_1;C-5 cytosine-specific DNA methylases active site.; MOTIFJ=[4,45,0,1];$
+
+Sequence #1:	DCM_ECOLI		Length of sequence #1 =  472
+Sequence #2:	MTA1_ARTLU		Length of sequence #2 =  521
+Sequence #3:	MTAA_SYNP2		Length of sequence #3 =  248
+Sequence #4:	MTB1_BACSH		Length of sequence #4 =  424
+Sequence #5:	MTB1_BREEP		Length of sequence #5 =  403
+Sequence #6:	MTB1_HERAU		Length of sequence #6 =  437
+Sequence #7:	MTB6_BACSP		Length of sequence #7 =  315
+Sequence #8:	MTBA_BACAR		Length of sequence #8 =  428
+Sequence #9:	MTBF_BACSU		Length of sequence #9 =  409
+Sequence #10:	MTBP_BPPHT		Length of sequence #10 =  443
+Sequence #11:	MTBR_BACSU		Length of sequence #11 =  436
+Sequence #12:	MTBR_BPRH1		Length of sequence #12 =  503
+Sequence #13:	MTBS_BPSPR		Length of sequence #13 =  439
+Sequence #14:	MTC1_CHVI3		Length of sequence #14 =  367
+Sequence #15:	MTC1_HERAU		Length of sequence #15 =  420
+Sequence #16:	MTC2_HERAU		Length of sequence #16 =  437
+Sequence #17:	MTD1_DESDN		Length of sequence #17 =  415
+Sequence #18:	MTD1_HERAU		Length of sequence #18 =  309
+Sequence #19:	MTD2_HERAU		Length of sequence #19 =  354
+Sequence #20:	MTDM_ARATH		Length of sequence #20 =  1534
+Sequence #21:	MTDM_HUMAN		Length of sequence #21 =  1495
+Sequence #22:	MTDM_MOUSE		Length of sequence #22 =  1502
+Sequence #23:	MTDX_HAEIN		Length of sequence #23 =  304
+Sequence #24:	MTE1_HERAU		Length of sequence #24 =  437
+Sequence #25:	MTE2_ECOLI		Length of sequence #25 =  477
+Sequence #26:	MTF1_FUSNU		Length of sequence #26 =  344
+Sequence #27:	MTG1_HAEGA		Length of sequence #27 =  357
+Sequence #28:	MTG2_HAEGA		Length of sequence #28 =  358
+Sequence #29:	MTH1_HAEHA		Length of sequence #29 =  327
+Sequence #30:	MTH2_HAEPA		Length of sequence #30 =  358
+Sequence #31:	MTH3_HAEAE		Length of sequence #31 =  330
+Sequence #32:	MTHT_METTF		Length of sequence #32 =  330
+Sequence #33:	MTM1_MORSP		Length of sequence #33 =  418
+Sequence #34:	MTNG_NEIGO		Length of sequence #34 =  330
+Sequence #35:	MTNM_NEIGO		Length of sequence #35 =  312
+Sequence #36:	MTNX_NEILA		Length of sequence #36 =  313
+Sequence #37:	MTS2_SHISO		Length of sequence #37 =  379
+Sequence #38:	MTS3_STAAU		Length of sequence #38 =  412
+Sequence #39:	MTS9_STAAU		Length of sequence #39 =  430
+Sequence #40:	MTSA_LACLC		Length of sequence #40 =  389
+Sequence #41:	MTSB_LACLC		Length of sequence #41 =  360
+Sequence #42:	MTSI_SALIN		Length of sequence #42 =  461
+Sequence #43:	MTSI_SPISQ		Length of sequence #43 =  386
+
+  A     R     N     D     C     Q     E     G     H     I     L     K     M     F     P     S     T     W     Y     V   
+ 1217  1194  1050  1162   288   798  1450  1431   410  1344  1623  1497   358  1059  1017  1215   919   207   712  1172 
+0.060 0.059 0.052 0.058 0.014 0.040 0.072 0.071 0.020 0.067 0.081 0.074 0.018 0.053 0.051 0.060 0.046 0.010 0.035 0.058 
+Total amino acids in 43 proteins: 20123
+
+Allocating and initializing arrays...
+
+RunType = 3, Normalized drop score = 0
+Motif parameters = [23, 0, 17]
+.ADQ,AQR,.RRG,RQP,REF,RGL,RKN,RKV,RFP,RFP,RVI,.NQR,.DCQ,DCG,DCG,DCF,DCS,DQR,DQR,DQR,DQG,DQS,DGC,DGQ,DFS,DPA,DPR,DPF,.CAR,CAG,CQG,CQG,CQF,CQS,CGR,CGD,CGG,CFG,CSR,CSG,CSG,.QRI,QNV,QGP,QFS,QSR,QSG,.ERQ,ENG,ENI,EDN,.GNV,GDR,GDL,GCA,GCQ,GCG,GCG,GCS,GQR,GQR,GQS,GGC,GGQ,GGG,GGF,GGF,GLR,GPN,GPC,GPC,GPQ,GPS,GPV,GSR,GSD,GSG,GYQ,GYV,GVR,..IDG,.LRN,LRG,LNR,LCQ,LCG,LQS,LGG,LGF,LGF,LGF,LKV,LFG,LFG,LPF,...FEN,FGL,FGL,FGL,FGF,:
+cutting 100 75 38 38: last score = 585, groups = 8
+FSG,.PRG,PRP,PNI,PNL,PDG,PCR,PCQ,PCG,PCG,PCF,PCS,PQR,PQG,PQG,PQF,PGR,PGS,PFN,PFE,PFG,PFS,PPC,PPS,PSR,PSD,PSG,PSG,PSG,PVK,.SDG,SGG,SGP,...YAR,YAR,YNV,YDQ,YDG,YQR,YQG,YQG,YGR,YGN,YGV,YLA,YLQ,YVQ,.VQR,
+
+:
+cutting 86 65 40 40: last score = 585, groups = 8
+
+CPU time to find and sort motifs: 18 seconds.
+Found 40 motifs.
+_________________________________Group #1_________________________________
+
+
+Motif: PCS in 43 proteins (0 duplicates), Merged 14, Score 964
++ + P C + + + S   + 
+Motif: PCQ in 37 proteins (0 duplicates), Merged 2, Score 877
++ + + P C Q   + +   
+Motif: PSG in 30 proteins (0 duplicates), Merged 1, Score 741
+P + +   + S   + +     + G 
+Motif: PCR in 27 proteins (0 duplicates), Merged 1, Score 754
+P C + + + +   + + +     + +   +   R 
+Motif: PGR in 27 proteins (0 duplicates), Merged 1, Score 735
+P + + + + +   + G + +   +   + +   R 
+Motif: PRP in 27 proteins (0 duplicates), Merged 1, Score 469
+P + + +   +   + +   +   + +   +   R + + + +         + +   +     + P 
+Motif: SGG in 26 proteins (0 duplicates), Merged 1, Score 489
+S   + +       G         + G 
+_________________________________Group #2_________________________________
+
+
+Motif: YQR in 36 proteins (0 duplicates), Merged 4, Score 818
+Y   +   +   + + + +   + + + + + Q   + + R 
+Motif: GQR in 34 proteins (0 duplicates), Merged 2, Score 944
++ G + + Q   R + R + 
+Motif: YGR in 32 proteins (0 duplicates), Merged 2, Score 935
+Y   +   +   + + + +   + + G + + +   R + R 
+Motif: RRG in 31 proteins (0 duplicates), Merged 1, Score 596
+  R + R + + + + G   
+Motif: GYQ in 30 proteins (0 duplicates), Merged 1, Score 846
+G Y   +   +   + + + +   + + + + + Q 
+Motif: GQR in 30 proteins (0 duplicates), Merged 1, Score 815
+G +   +       + + + +   + + + + + Q   R 
+Motif: AQR in 29 proteins (0 duplicates), Merged 1, Score 741
+A   + + + + + Q   + + R 
+Motif: PQR in 28 proteins (0 duplicates), Merged 1, Score 870
++ + + P Q   R + + + 
+_________________________________Group #3_________________________________
+
+
+Motif: LFG in 35 proteins (0 duplicates), Merged 2, Score 708
++ + L F + +   G +   
+Motif: LFG in 27 proteins (0 duplicates), Merged 1, Score 582
+L F + +   + +       + +       G 
+Motif: GGF in 25 proteins (0 duplicates), Merged 1, Score 825
+G + + G +     + F + 
+Motif: FGL in 24 proteins (0 duplicates), Merged 1, Score 783
+F + G   + +   + L + 
+Motif: FGL in 24 proteins (0 duplicates), Merged 1, Score 508
+F + +   G           L 
+Motif: IDG in 24 proteins (0 duplicates), Merged 1, Score 493
+I D + +         G   
+Motif: FGL in 23 proteins (0 duplicates), Merged 1, Score 811
+F + + + + G + + L + 
+Motif: GGF in 23 proteins (0 duplicates), Merged 1, Score 807
++ G G + +   + F +   
+_________________________________Group #4_________________________________
+
+
+Motif: GNV in 33 proteins (0 duplicates), Merged 3, Score 653
++ + + G N + V + +   
+Motif: YGN in 32 proteins (0 duplicates), Merged 1, Score 782
++   Y + + + G N + + 
+Motif: YQG in 23 proteins (0 duplicates), Merged 1, Score 810
++   Y + Q   G + + + 
+Motif: QNV in 23 proteins (0 duplicates), Merged 1, Score 655
++ + Q   + N + V   + 
+_________________________________Group #5_________________________________
+
+
+Motif: FEN in 30 proteins (0 duplicates), Merged 2, Score 676
++   F +   E N + + + 
+Motif: PFN in 29 proteins (0 duplicates), Merged 1, Score 838
++ P +   F +   + N + 
+Motif: GPV in 28 proteins (0 duplicates), Merged 2, Score 826
+G + + + +   +   + + + +     + P + + + + + + + V 
+Motif: PNL in 28 proteins (0 duplicates), Merged 1, Score 723
+P + + + + + + N + + + L 
+Motif: LPF in 27 proteins (0 duplicates), Merged 1, Score 587
+L + + + +   + + +       + P +   F 
+Motif: LRN in 24 proteins (0 duplicates), Merged 1, Score 981
+L +   + + + R + + + +   + P + + + + + E N 
+Motif: PVK in 24 proteins (0 duplicates), Merged 1, Score 748
+P +   +     + + V K 
+Motif: RKN in 24 proteins (0 duplicates), Merged 1, Score 517
+R +   + +   +     + + + +     + + K   + + + + N 
+_________________________________Group #6_________________________________
+
+
+Motif: RQP in 27 proteins (0 duplicates), Merged 1, Score 1039
+R + + + + + E   + + + Q + + P 
+Motif: ERQ in 25 proteins (0 duplicates), Merged 1, Score 763
++ + E + + R + Q + + 
+Motif: RFP in 23 proteins (0 duplicates), Merged 1, Score 955
++ + R + + + F P + + 
+Motif: REF in 23 proteins (0 duplicates), Merged 1, Score 585
+R + + + +   E     + + + + + +     F 
+_________________________________Group #7_________________________________
+
+
+Motif: EDN in 24 proteins (0 duplicates), Merged 1, Score 576
+E   D +   +     + +     N 
+___________________________________________________________________________
+
+Printed 40 motifs out of 40 total.
+Mean score: 745 
+
+Starting motomat...
+
+MOTOMAT  2/28/98.1: (C) Copyright 1991 by Fred Hutchinson Cancer Research Center
+Please cite: S.Henikoff & J.Henikoff, NAR 19:6565-6572 (1991).
+Using BLOSUM62 scoring matrix.
+
+>PS00094x;C5_MTASE_1;C-5 cytosine-specific DNA methylases active site.; 
+
+40 blocks read using parameters [23, 0, 17]. 43 sequences.
+Processing blocks in PS00094.mot using a cut-off score of 1 
+   and a clustering threshold of 80 percent.
+
+Merging raw blocks...
+Merging motif 2 into motif 0
+Merging motif 4 into motif 0
+Merging motif 13 into motif 8
+Recalculating block column scores.....................................
+Extending blocks...
+Block 0: PCS
+Block 1: PCQ
+Block 2: PSG has been merged.
+Block 3: PCR
+Block 4: PGR has been merged.
+Block 5: PRP
+Block 6: SGG
+Block 7: YQR
+Block 8: GQR
+Block 9: YGR
+Block 10: RRG
+Block 11: GYQ
+Block 12: GQR
+Block 13: AQR has been merged.
+Block 14: PQR
+Block 15: LFG
+Extended width was 9, re-extending with cutoff score of 400.
+Block 16: LFG
+Block 17: GGF
+Block 18: FGL
+Block 19: FGL
+Block 20: IDG
+Extended width was 9, re-extending with cutoff score of 400.
+Block 21: FGL
+Block 22: GGF
+Block 23: GNV
+Extended width was 8, re-extending with cutoff score of 400.
+Block 24: YGN
+Extended width was 8, re-extending with cutoff score of 400.
+Extended width was 8, re-extending with cutoff score of 350.
+Block 25: YQG
+Extended width was 8, re-extending with cutoff score of 400.
+Block 26: QNV
+Extended width was 8, re-extending with cutoff score of 400.
+Block 27: FEN
+Block 28: PFN
+Block 29: GPV
+Block 30: PNL
+Block 31: LPF
+Block 32: LRN
+Block 33: PVK
+Block 34: RKN
+Block 35: RQP
+Block 36: ERQ
+Extended width was 9, re-extending with cutoff score of 400.
+Block 37: RFP
+Extended width was 6, re-extending with cutoff score of 400.
+Block 38: REF
+Block 39: EDN
+
+Merging extended blocks....
+Using a drop score of -1 standard deviations or 400.
+Mean score=796.57, standard deviation=193.65
+Dropping blocks with score below 601...
+ unless they have more than one merged motif
+Block 0:
+ PCS (extended width=25, score=1073  motifs=16, motif width=18, conserved=13)
+Block 1:
+ PCQ (extended width=16, score=1174  motifs=2, motif width=3, conserved=11)
+Block 3:
+ PCR (extended width=25, score=1023  motifs=1, motif width=18, conserved=13)
+Block 5 has been dropped for low score:
+ PRP (extended width=47, score=490  motifs=1, motif width=34, conserved=13)
+Block 6 has been dropped for low score:
+ SGG (extended width=19, score=410  motifs=1, motif width=14, conserved=6)
+Block 7:
+ YQR (extended width=27, score=978  motifs=4, motif width=21, conserved=13)
+Block 8:
+ GQR (extended width=20, score=1023  motifs=3, motif width=12, conserved=11)
+Block 9:
+ YGR (extended width=27, score=983  motifs=2, motif width=21, conserved=14)
+Block 10 has been dropped for low score:
+ RRG (extended width=10, score=596  motifs=1, motif width=8, conserved=4)
+Block 11:
+ GYQ (extended width=27, score=903  motifs=1, motif width=18, conserved=15)
+Block 12:
+ GQR (extended width=27, score=938  motifs=1, motif width=20, conserved=13)
+Block 14:
+ PQR (extended width=20, score=848  motifs=1, motif width=4, conserved=11)
+Block 15:
+ LFG (extended width=18, score=921  motifs=2, motif width=6, conserved=8)
+Block 16:
+ LFG (extended width=18, score=838  motifs=1, motif width=16, conserved=7)
+Block 17:
+ GGF (extended width=12, score=705  motifs=1, motif width=9, conserved=7)
+Block 18:
+ FGL (extended width=14, score=1003  motifs=1, motif width=9, conserved=8)
+Block 19 has been dropped for low score:
+ FGL (extended width=11, score=590  motifs=1, motif width=11, conserved=5)
+Block 20 has been dropped for low score:
+ IDG (extended width=10, score=473  motifs=1, motif width=9, conserved=4)
+Block 21:
+ FGL (extended width=14, score=919  motifs=1, motif width=9, conserved=8)
+Block 22:
+ GGF (extended width=12, score=736  motifs=1, motif width=7, conserved=7)
+Block 23:
+ GNV (extended width=13, score=733  motifs=3, motif width=4, conserved=6)
+Block 24 has been dropped for low score:
+ YGN (extended width=23, score=543  motifs=1, motif width=6, conserved=6)
+Block 25:
+ YQG (extended width=12, score=699  motifs=1, motif width=5, conserved=6)
+Block 26:
+ QNV (extended width=13, score=703  motifs=1, motif width=6, conserved=6)
+Block 27:
+ FEN (extended width=10, score=798  motifs=2, motif width=5, conserved=5)
+Block 28:
+ PFN (extended width=12, score=896  motifs=1, motif width=8, conserved=7)
+Block 29:
+ GPV (extended width=28, score=960  motifs=2, motif width=24, conserved=13)
+Block 30:
+ PNL (extended width=28, score=922  motifs=1, motif width=12, conserved=12)
+Block 31:
+ LPF (extended width=30, score=717  motifs=1, motif width=17, conserved=13)
+Block 32:
+ LRN (extended width=28, score=974  motifs=1, motif width=21, conserved=13)
+Block 33:
+ PVK (extended width=12, score=916  motifs=1, motif width=10, conserved=9)
+Block 34:
+ RKN (extended width=28, score=798  motifs=1, motif width=24, conserved=14)
+Block 35:
+ RQP (extended width=16, score=818  motifs=1, motif width=15, conserved=11)
+Block 36:
+ ERQ (extended width=16, score=652  motifs=1, motif width=6, conserved=8)
+Block 37:
+ RFP (extended width=10, score=659  motifs=1, motif width=6, conserved=6)
+Block 38:
+ REF (extended width=18, score=665  motifs=1, motif width=18, conserved=9)
+Block 39 has been dropped for low score:
+ EDN (extended width=13, score=396  motifs=1, motif width=13, conserved=3)
+Surviving blocks=30, max dups=0
+Reducing block overlaps ...
+Block 0 has been trimmed by -2 to eliminate overlap with Block 29.
+Block 15 has been trimmed by -3 to eliminate overlap with Block 23.
+Block 18 has been trimmed by -2 to eliminate overlap with Block 23.
+
+
+Looking for best path..., npath=7795, nseqs=38
+
+Path: 15 0 29 8 35 23
+Best path has 38 sequences out of 43:
+ (0, 1092) B15 LFG
+Saving block LFG in file PS00094A.blk
+ (0, 107) B0 PCS
+Saving block PCS in file PS00094B.blk
+ (0, 34) B29 GPV
+Saving block GPV in file PS00094C.blk
+ (23, 34) B8 GQR
+Saving block GQR in file PS00094D.blk
+ (70, 274) B35 RQP
+Saving block RQP in file PS00094E.blk
+ (11, 31) B23 GNV
+Saving block GNV in file PS00094F.blk
+6 blocks, 115 AAs, total score=955213, total motifs=27, total conserved=62
+ total sequences=38 out of 43
+Sequences in the best path:
+000: DCM_ECOLI 001:MTA1_ARTLU 003:MTB1_BACSH 004:MTB1_BREEP 005:MTB1_HERAU 
+006:MTB6_BACSP 007:MTBA_BACAR 008:MTBF_BACSU 009:MTBP_BPPHT 010:MTBR_BACSU 
+011:MTBR_BPRH1 012:MTBS_BPSPR 014:MTC1_HERAU 015:MTC2_HERAU 016:MTD1_DESDN 
+017:MTD1_HERAU 018:MTD2_HERAU 019:MTDM_ARATH 020:MTDM_HUMAN 021:MTDM_MOUSE 
+022:MTDX_HAEIN 023:MTE1_HERAU 024:MTE2_ECOLI 025:MTF1_FUSNU 028:MTH1_HAEHA 
+029:MTH2_HAEPA 030:MTH3_HAEAE 031:MTHT_METTF 032:MTM1_MORSP 033:MTNG_NEIGO 
+034:MTNM_NEIGO 035:MTNX_NEILA 036:MTS2_SHISO 037:MTS3_STAAU 038:MTS9_STAAU 
+039:MTSA_LACLC 040:MTSB_LACLC 042:MTSI_SPISQ 
+Sequences not in the best path:
+002:MTAA_SYNP2 013:MTC1_CHVI3 026:MTG1_HAEGA 027:MTG2_HAEGA 041:MTSI_SALIN 

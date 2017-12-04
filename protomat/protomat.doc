@@ -1,0 +1,862 @@
+July 1991
+Jorja G. Henikoff and Steven Henikoff*
+*Howard Hughes Medical Institute
+Fred Hutchinson Cancer Research Center
+1124 Columbia Street
+Seattle, WA 98104
+henikoff@u.washington.edu
+
+                         PROTOMAT System
+
+
+The PROTOMAT system is a family of programs that finds common
+motifs in a group of related protein sequences and uses the
+results to search for sequence homologies.  The motifs are
+discovered using Hamilton Smith's algorithm (Smith, H. O. et al.,
+PNAS 87, pp. 826-830).  Blocks containing the motifs are then
+prepared for the PATMAT searching program (Henikoff, S. et al.,
+Methods in Enzymology 183, pp. 111-132).  When multiple motif
+blocks are found in a group of protein sequences they provide a
+partial multiple alignment of the sequences, and this information
+can be used to evaluate the results of searching.  
+
+We use the terms "pattern", "motif" and "block" to distinguish
+somewhat different entities in protein sequences.  The terms
+pattern and motif are often used synonymously to describe a
+cluster of residues that occurs frequently within a group of
+proteins.  However, we use the term pattern to refer exclusively
+to pattern entries found in PROSITE: A Dictionary of Protein
+Sites and Patterns (A. Bairoch, U. of Geneva, Sixth release,
+1991).  We use the term motif to describe the type of motif found
+by Smith's algorithm, consisting of three amino acids separated
+by specified distances.  A block is a solid (ungapped) array of
+aligned sequence segments containing one or more motifs, and
+possibly a pattern as well.
+
+All programs are written in the C programming language and run on
+IBM-compatible PC's and UNIX workstations. The following page
+contains an overall flowchart of the PROTOMAT system.
+                      Overall Flow Chart
+
+                                     
+                                     
+                 PROSITE.DAT       PROSITE AC# [all]
+                           1       2 
+                       -------------------
+                       |                 | 3 name [PS?????]
+        ---------------|    PROTOMOT     | 4 SWISS DB [none]  
+        |              |                 | 5 protein directory
+        |              -------------------   [pros\name\]
+     name.pat                 name.lis
+        |                       |    
+        |                       |    
+        |              -------------------
+        |              |                 | 2 database
+        |              |    UEXTRACT     |    
+        |              |                 |    
+        |              -------------------    
+        |                 |     |    
+        |             name.lst  |    
+        |                 2   pros\name\*.pro
+        |              -------------------
+        | RunType[0] 1 |                 | 3 SIGNIF [#seqs]
+        |              |     MOTIFJ      | 4 DUPS [0]
+        |              |                 | 5 DISTANCE [17]
+        |              ------------------- 6 DROP [0]
+        |                       |        
+        |                    name.mot  
+        |                       1      
+        |              -------------------
+        |              |                 | 2 MinScore [1]
+        |              |    MOTOMAT      | 3 ClThres [80]
+        |              |                 | 4 DropScore [-10]
+        |              -------------------      
+        |                       |      ³        
+        |                 name?.blk   name.plt--------PLOT TOOL
+        |                (probe)|                              
+        |              -------------------                     
+        |              |                 |                     
+        ---------------|     PATMAT      ------------          
+              (probe)  |                 | (target) |          
+                       -------------------          |          
+                                |                   |          
+                          search results            |          
+                       -------------------          |          
+                       |                 |          |          
+                       |    MATODAT      |          |          
+                       |                 |          |          
+                       -------------------          |          
+                                |                   |          
+                           blocks database ----------         
+                      System Documentation
+
+The system consists of five programs and each performs a specific
+function. The programs can be executed individually or in
+concert. 
+
+1.  Determine a group of related proteins (PROTOMOT program).
+
+This step can employ any technique for grouping related proteins. 
+At least two sequences are required to search for motifs.  The
+maximum number of sequences in a group is determined by memory
+limitations; currently 50 for the PC version and 200 for the UNIX
+version.
+
+We use the groupings of protein sequences documented as patterns
+in the PROSITE database distributed by EMBL. Although these
+groups of proteins are known to contain a common amino acid
+pattern, we do not explicitly use the pattern, just the sequence
+groupings.  The same protein or group of proteins may be listed
+in PROSITE for more than one pattern entry.
+ 
+The PROTOMOT program reads through the PROSITE.DAT file looking
+for the key word "PATTERN" on the ID line of an entry.  It keeps
+the ID, AC and DE lines for documentation, and then analyzes the
+NR, PA and DR lines in the PROSITE entry.  Since PROSITE.DAT is a
+text file, several assumptions must be made about the contents of
+an entry.
+
+ID,AC,DE lines:  When all PROSITE entries are requested, an entry
+is ignored if "_2;", "_3;" or "signature 2" or "signature 3" are
+found on these lines.  This is done because the same group of
+sequences will usually appear in a "signature 1" entry  and we
+only need to analyze a group of sequences once; an exception is
+entry PS00023, Fibronectin 2. These entries can be requested
+individually.
+
+NR line:  We use the information on this line to determine how
+many sequences are in the group (we count the true positives, the
+false negatives and the potential positives) and how many times
+the pattern is repeated throughout the group. If there are fewer
+than two sequences, the entry is ignored. The number of repeats
+is saved and the information used when looking for motifs.
+
+PA line:  Although we do not explicitly use the pattern when
+looking for motifs, we use information contained in the pattern
+to determine the default distance parameter for MOTIF. Since
+Smith's motifs consist of three amino acids separated by two
+distances, we analyze the pattern to see if there are any sub-
+patterns of this form. If so, we note the maximum distance value.
+The maximum distance of all the patterns is used as the default
+motif searching distance; this value is currently 17.
+PROTOMOT writes the pattern to a ".pat" file.  This file can be
+presented to PATMAT as a query for a pattern search.
+
+DR line:  From this line we pick up the SWISS-PROT ID of all the
+true positive, false negative and potential positive sequences in
+the group.  These IDs and the information saved from the rest of
+the PROSITE entry are written to a ".lis" file.
+
+PROTOMOT has five arguments, all of which can be entered on the
+command line.  The arguments must be listed on the command line
+in the indicated order and separated by spaces:
+     protomot [PROSITE.DAT AC name [DB] [directory] ]
+
+e.g. protomot c:\prosite\prosite.dat PS00028 zinc 
+     c:\embl\swiss.dat c:\jorjas\pros\
+
+The first argument is the location of the PROSITE.DAT file, the
+second is the accession number of the entry to be processed
+(PROSITE AC line), which defaults to "all" pattern entries.  If a
+specific entry is requested, it will be processed even if it is a
+"signature 2", etc. entry.  The third argument is a short name
+which is used for all files related to this entry ("zinc" in the
+example). The default name is the entire accession number, for
+example, "PS00028". The fourth argument is the location of the
+SWISS-PROT sequence database; the default is "none". If a
+database name is provided, a sequence extraction program will be
+executed, and a fifth argument can be provided indicating the
+name of a directory where the extracted sequences should be
+placed. If no directory name is entered, the default directory
+name is "pros\name\" for DOS and "pros/name/" for UNIX, where
+name comes from the third argument.
+
+If a database name has been provided, PROTOMOT automatically
+executes the UEXTRACT program and passes it the ".lis" file of
+sequence IDs so that the actual sequences can be extracted from
+the sequence database.  If it has also been given a directory
+name, it passes that information on.  UEXTRACT will create the
+directory if it does not already exist.
+2.  Get the protein sequences for a group of related proteins
+(UEXTRACT program).
+
+Subsequent programs require that each protein sequence reside in
+a separate file, so we use UEXTRACT to extract the sequences from
+an un-indexed sequence database. (While UEXTRACT is not very
+fast, it is general and requires no pre-processing of the
+databases). The program recognizes several database formats,
+including EMBL and GENBANK. The sequences listed in a ".lis" file
+are extracted and placed in ".pro" files.  A particular directory
+can optionally be specified by including a line in the ".lis"
+input file. The ".lis" file can be created by the PROTOMOT
+program, or manually using any text editor.
+
+If the ".lis" file contains SWISS-PROT IDs, UEXTRACT also
+produces a modified version of the ".lis" file called the ".lst"
+file with fewer sequence IDs. If a sequence in the ".lis" file
+has a title that includes the word "FRAGMENT", that sequence is
+eliminated. If several sequence IDs in the ".lis" file have the
+same gene name (the first three or four characters preceding the
+"$" in the ID) and the same genus name (the first three
+characters following the "$"), then the longest of these
+sequences is selected to represent the group. The objective is to
+reduce the number of redundant sequences in the group without
+losing too much information.  Either the sequences in the ".lis"
+file or those in the ".lst" file can be used for the motif
+search.  UEXTRACT prepares the ".lst" file instead of PROTOMOT
+because the sequence titles and lengths are required and PROTOMOT
+does not access the sequence database.
+
+UEXTRACT has two parameters, which can be entered as command line
+arguments in the order indicated:
+               uextract [list [database]]
+     e.g. uextract zinc.lis c:\embl\swiss.dat
+
+The first argument is the name of a file containing a list of
+sequences to be extracted, and the second is the name of the
+database from which to extract them.  If the database is in EMBL
+format the sequence "ID" should be listed, if it is in GENBANK
+format the sequence "LOCUS" should be listed.  Sequences are
+listed one per line in the file. The first line of the file may
+contain a title beginning with ">", and the second line may
+indicate the name of a directory where the extracted sequences
+should be placed. UEXTRACT will attempt to create the directory
+if it does not already exist (it has a problem detecting whether
+a directory already exists under UNIX).
+
+UEXTRACT automatically executes MOTIFJ, passing it the ".lst"
+file group of proteins. If it was started by PROTOMOT, UEXTRACT
+executes MOTIFJ with run type 4 (see section 3), since the
+appropriate significance level is unknown at this point. The
+number of duplicates is set by examining the Prosite entry REPEAT
+fields (this information is placed in the title line of the
+".lis" file), and a distance of 17 is always used; 17 is the
+current maximum motif distance implied by examining all Prosite
+patterns.
+
+
+WARNING: The SWISS-PROT ID is 10 characters long. Under DOS, file
+names are restricted to 8 characters so the name of the ".pro"
+file is the first 8 characters of the ID. In some cases, this
+will result in non-unique file names.
+
+NOTE: The functions of the PROTOMOT and UEXTRACT programs are
+simply to prepare a group of related protein sequences for the
+motif search. Other convenient means of creating a ".lis" or
+".lst" file and the corresponding ".pro" files can also be used,
+and must be used for groups of proteins not included in PROSITE.
+If you do not use UEXTRACT to construct the ".lis" and ".lst"
+files, you can avoid problems by including a one line title of
+this form, observing the punctuation exactly:
+
+     >7 character AC;20 character or less ID;longer description;3.  Find motifs in a group of related protein sequences (MOTIFJ
+program).
+
+MOTIFJ is a variation of Smith's MOTIF program, which is
+described in the file MOTIF.DOC. The basic algorithm for locating
+motifs has not been changed, nor have the basic data structures.
+Alterations were made largely to make the program more convenient
+to use for our particular application. Because we are interested
+in finding conserved regions among possibly distant groups of
+protein sequences, we use the PAM120 scoring matrix instead of
+PAM250 by default. However, you can specify any scoring matrix by
+placing the name of the file that contains it in a file named
+protomat.stp in your current directory. The format of these files
+is explained in section ??? 
+
+Since we extend blocks in a separate program, we leave the block
+widths the same as the motif widths; in the original MOTIF
+program they range from 30 to 55 amino acids wide, depending on
+the motif width. We normalized the block score to compensate for
+different widths by dividing by the square root of the block
+width. A normalized block drop score parameter was added to
+provide a way to use knowledge about the sequences being analyzed
+to eliminate blocks that are probably random. Such knowledge can
+be obtained by shuffling the sequences and examining the
+resulting blocks. However, this parameter should be used with
+caution since the result is to drop any block with a normalized
+score below the value entered. Random blocks seem to score below
+500 while interesting blocks score from about 700 to about 2000;
+the theoretical maximum score is 18,540.
+
+Pruning motifs has been changed so that a representative of every
+possible group of motifs is more likely to be kept. Whenever 100
+motifs are accumulated, they are first tested for "nearness" to
+each other using Smith's definition (within 10 amino acids of
+each other). Only the highest scoring of nearby motifs is kept,
+but a count is kept of how many other motifs were dropped in its
+favor. Then the remaining motifs are sorted by the number of
+sequences in which they occur, by the number of nearby motifs
+dropped and by score, and the top 50 motifs are retained. In the
+original MOTIF, the nearness test is only done once at the end of
+the motif search, not every time 100 motifs are accumulated, and
+the motifs are sorted by significance and score alone. If a group
+a closely related sequences is analyzed with the original
+program, it is possible that a large number of very high scoring
+motifs will flood out other lower scoring, but still interesting,
+motifs. The modified program tends to produce more motifs.
+
+
+Allocation of memory has been changed slightly so that the amount
+allocated depends on the size of the problem.  This allows MOTIFJ
+to run with less memory when fewer sequences are input and/or
+smaller search widths are requested.
+Several additions have been made to the way parameters can be
+input, although the current system in no way earns the
+appellation "user-friendly". For convenience, we define five
+modes of running MOTIFJ and use the variable RunType in the
+program to indicate the current mode. The first four modes are
+determined by the possible combinations of interactive/non-
+interactive and iterative/non-iterative. By interactive, we mean
+the user must type in answers to questions as the program
+proceeds. In the non-interactive modes, the program will use
+reasonable values and not request any input. These modes are
+useful because the output can be directed to a file for perusal
+at a later time. By iterative, we mean that the program will
+iterate through a series of parameter values until motifs are
+found. In the non-iterative modes, the program uses only one set
+of parameters. The original MOTIF is interactive and non-
+iterative.  The fifth mode is another non-interactive/iterative
+mode that we use to determine an appropriate significance level.
+
+For all five run types, the user can optionally enter the six
+parameter values for batch file name, significance level
+(SIGNIF), internal duplicates (DUPS), search width (DISTANCE) and
+normalized block drop score (DROP) on the command line.  The
+order of the command line parameters must be as listed:
+
+     motifj [RunType batch_filename SIGNIF DUPS DISTANCE DROP]
+
+     a.   RunType=0: Interactive, non-iterative mode
+          This is the default mode, and is essentially the same
+as the original MOTIF, with the exeception that the default
+output is short form instead of long form.  The user types
+"MOTIFJ" at the DOS prompt and answers a series of questions. We
+have added default values and some limit checking.
+
+     b.   RunType=1: Non-interactive, non-iterative mode
+          We often use computers without attached printers and
+wanted to be able to capture MOTIFJ output to a file.  Re-
+directing standard output is awkward with the original MOTIF
+because of the interactive responses. With this mode, the user is
+expected to enter parameter values on the command line. No
+further responses are required; the program uses default values
+as follows:
+                    Shuffled sequences? n (no)
+                    Number to print? all
+                    First motif or long form? s (short form)
+                    Number to map? all 
+
+Here is a sample use of this mode:
+          motifj 1 cytosine 14 0 5 0 >cytosine.out
+Proteins are read from the file named "cytosine" and motifs are
+found with significance level = 14, internal duplicates = 0,
+search width = 5 and normalized drop score = 0 (which means no
+motifs will be dropped based on this score). Output is redirected
+to the file named "cytosine.out".
+
+     c.   RunType=2: Interactive, iterative mode
+          Using this mode, the program will automatically iterate
+through a series of significance levels until it finds at least
+two motifs. It is useful if the user is not sure what parameters
+to use. If the user supplies command line parameters, it will
+start with those values. If no parameter values are entered on
+the command line, it prompts for them as with RunType=0. It
+begins the search with the significance level input. If it does
+not find at least two motifs, it reduces the significance level
+by one and tries again, always leaving the other parameters the
+same. It repeats this process until at least two motifs are
+found.
+
+Here is a sample use of this mode:
+          motifj 2 arac 99 0 10 0
+Proteins are read using the batch file named "arac". The first
+iteration will use significance level = NUMSEQS since the level
+entered, 99, is greater than the actual number of sequences in
+the batch file, internal duplicates = 0 and search width = 10,
+[NUMSEQS, 0, 10] for short, and drop score = 0. 99 is used as a
+place-holder in this example because of the desire to specify the
+search width. If no motif is found, the second iteration will use
+[NUMSEQS-1, 0, 10].  Subsequent iterations, if required, will use
+[NUMSEQS-2, 0, 10], [NUMSEQS-3, 0, 10],...[2, 0, 10].
+
+     d.   RunType=3: Non-interactive, iterative mode
+          This mode is similar to RunType=2, but no responses are
+requested. If parameters are provided on the command line, it
+starts with those. If not, it starts with significance level
+equal to the majority of the sequences, internal duplicates equal
+to 0 and search width equal to 17. It is useful the first time a
+set of sequences is presented to MOTIFJ. For example;
+          motifj 3 arac >arac.out       
+will start iterating at [(NUMSEQS/2)+1, 0, 17] and all output
+will be directed to the file named "arac.out".
+
+     e.   RunType=4: Shuffled, non-interactive, iterative mode
+          This mode is useful for determining the minimum
+significance level for a new group of sequences. It shuffles the
+sequences and increases the significance level until fewer than
+two motifs are found. It notes the highest normalized score of
+these random blocks. Then it re-executes MOTIFJ with RunType=3
+using that significance level and a normalized drop score equal
+to that of the highest random block score. If no significance
+level is input, it starts with (NUMSEQS/2)+1 (rounded up to the
+majority of the sequences) and will not go below this value. It
+increases the significance level by one repeatedly and looks for
+motifs until it finds fewer than two. If no duplicates value is
+input, it uses 0; if no distance value is input, it uses 17.
+
+Batch files have been made a little more flexible than in the
+original MOTIF program. The first line can be a title of up to
+128 characters starting with ">". The user can point to protein
+files in several different directories by effectively doing a
+"cd" within the file. This is accomplished (somewhat clumsily) by
+inserting a separate line in the file with the full directory
+name including drive and terminating backslash (DOS) or slash
+(UNIX). The default directory remains "pros\", and protein files
+in that directory should be listed first.  For example:
+
+          arac                     (pros\arac.pro)
+          melr                     (pros\melr.pro)
+          c:\jorjas\
+          tetr                     (c:\jorjas\tetr.pro)
+          phom                     (c:\jorjas\phom.pro)
+          a:\
+          cfara                    (a:\cfara.pro)
+
+Protein sequence files have also been made a little more flexible
+so that files can be used directly from GenePro. Everything
+before the first "$", if there is one, is ignored and can be used
+as a title, otherwise everything before the first newline
+character is ignored. This allows the use of a longer title. Here
+is a typical protein file from GenePro:
+>Arabinose operon regulatory protein - Eschericia coli$
+MAEAQNDPLLP ...
+...
+...VAVKLS*
+
+An addition to MOTIFJ is the ".mot" output file. This binary file
+contains a summary of all motifs for use by the program MOTOMAT.
+The information written to this file includes the parameters
+given to MOTIFJ, the protein sequences and their lengths, and the
+motifs. Because we are interested in the final motif blocks,
+after all sequences have been re-aligned and because the re-
+alignment is done by MOTIF when the motifs are printed, it is
+important that all blocks to be analyzed by MOTOMAT are "printed"
+by MOTIFJ. The name of the ".mot" file is the name of the batch
+file, if one was entered, otherwise it is "motif". For example,
+if the batch file name is "cytosine", then "cytosine.mot" will be
+created.
+
+MOTIFJ executes MOTOMAT and passes it the ".mot" file.
+4.  Determine and assemble the best motif blocks (MOTOMAT
+program).
+
+The purpose of the MOTOMAT program is to prepare the motif blocks
+for use with PATMAT, which will use them to compute searching
+matrices and carry out protein or (translated on-the-fly) DNA
+database searches. The blocks can also be concatenated into a
+database that PATMAT will convert into matrices on-the-fly and
+search using a protein or (translated) DNA query. 
+
+MOTOMAT first merges all blocks for which all sequences are
+aligned the same and for which the regions of the block spanned
+by their motifs overlaps. A "merged motif region" is noted, which
+is the maximal region spanned by all the motifs in the merged
+blocks, that is, the union of the merged motifs. 
+
+After the original blocks are merged, the MOTIF column and block
+scores are re-calculated for all blocks. The score is calculated
+for 60 columns centered around the motif region. Since the
+original scores are computed before all sequences have been re-
+aligned against the the block and do not include the sequences
+which do not include the motif, the re-computed scores will
+usually be different. We use the same column scores, normalized
+block scores and similarity matrix as MOTIFJ. 
+
+The next thing MOTOMAT does is to extend the merged blocks using
+either a cutoff column score provided by the user, or by
+calculating all possible blocks and selecting the block with the
+best score (a dummy cutoff column score value of 1 selects this
+option, which is the default). The program extends the original
+MOTIFJ blocks by expanding out from the motif region to the
+maximum width of 60. If the "best block" option is selected
+(cutoff column score = 1), the program computes the normalized
+score of all possible blocks containing the motif region and
+selects the one with the highest score. If a real column cutoff
+score is entered, it starts at either end of the merged motif
+region and marches outward until the column score drops below the
+cutoff value. Reasonable column cutoff scores range from 800
+(stringent) to 700 (relaxed) using the PAM-120 similarity matrix.
+An "extended block score" is calculated from the column scores of
+the final block.
+
+When the "best block" procedure results in a block less than ten
+amino acids wide, the program will try re-extending with column
+cutoff scores of based on the high-pass filter value specified in
+protomat.stp (800 by default) in order to get a wider block.
+Narrow blocks have proven to be too non-specific for effective
+searching.
+
+If no parameters are specified, MOTOMAT will use a cutoff column
+score of 1 (check all possible blocks). Although it takes a
+little longer than specifying a cutoff score, we recommend that
+this option be used. If you are interested in producing a partial
+multiple alignment, a more stringent column cutoff score may give
+better results. A serious drawback to using a relaxed column
+score is that excessive extension of a block boundary can cause
+it to overlap the boundary of a neighboring block, causing one of
+them to drop out of an otherwise optimal assembly.
+
+After the blocks are extended, MOTOMAT does another cycle of
+merging blocks, this time merging two blocks if they overlap in
+all sequences in the same way in any portion of their domains
+(not just within the motif region). However, it will not merge
+such blocks if their combined width exceeds 60 amino acids. This
+restriction is again motivated by the desire to produce blocks
+useful for searching; blocks wider than 60 tend to be too
+specific. If blocks cannot be merged because of the width
+restriction, they are divided so that they are contiguous but
+non-overlapping. Small groups of closely related sequences can
+produce very wide blocks.
+
+In an attempt to discard un-interesting blocks, we drop any
+extended block with a score less than a specified number of
+standard deviations from the mean of all extended block scores,
+unless the block results from the merger of other blocks, in
+which case it is never dropped. By default, any block with a
+score less than one standard deviation below the mean is dropped.
+These blocks, while not exactly random because some of the
+sequences may be aligned reasonably, tend to confuse subsequent
+results. We also want to reduce the number of blocks in order to
+constrain the search for the best set of blocks.
+
+The block score of each surviving block is multiplied by the
+number of blocks merged into it to exaggerate its importance.
+Block comparison is based on the product of the number of merged
+blocks and the block score because the presence of multiple
+motifs is stronger evidence than the score alone. 
+
+Next, MOTOMAT clusters similar sequences so that PATMAT can
+average their contribution to the searching matrix.  We count the
+number of identical amino acids in the trimmed block for each
+possible pair of sequences, and cluster those with a percentage
+of identities above a specified threshold (the default is 80%). 
+This simple clustering algorithm assumes that if sequences x and
+y and sequences y and z pairwise have enough identical amino
+acids, then x, y and z should all be clustered, even though
+sequences x and z may not have enough pairwise identities to be
+clustered.
+
+By running MOTOMAT interactively (not supplying any command line
+arguments), each block can be saved in a ".blk" file at this
+stage; see below for the format of the file. The ".blk" file
+created at this stage will have one line for each sequence in the
+group, exactly as displayed by MOTOMAT.
+After clustering, MOTOMAT tries to assemble the surviving blocks
+into a "best path", which is an optimal set of non-overlapping
+blocks that appear in the same order in a critical number of
+sequences. We use the MOTIFJ significance level (SIGNIF) as the
+critical number of sequences. In order to find the best path, the
+program builds an unrooted directed acyclic graph representing
+all the non-overlapping orderings of all the blocks among all the
+sequences, sorts the graph, finds all the valid paths through the
+graph using a depth-first search (A.V. Aho, J.E. Hopcroft and
+J.D. Ullman, Data Structures and Algorithms, Addison-Wesley,
+1983, pp. 215-222), and determines the best path based on block
+scores and number of sequences.
+
+A valid path is a series of non-overlapping blocks that appear in
+the same order in a set of at least SIGNIF sequences (it is a
+partial multiple alignment of those sequences). The "best" path
+has the highest total score, where the total score is the sum of
+the products of the number of merged blocks and the block score
+for each block in the path, with that sum multiplied by the ratio
+of the the number of sequences in the path divided by the total
+number of sequences. The best path may not include all sequences
+in the group, but it will include at least SIGNIF of them. In
+order to insure that the graph is acyclic, SIGNIF must be at
+least a majority of the sequences. Paths with more sequences tend
+to be favored, but there is still the possibility that a path
+with several blocks and fewer sequences will beat a path
+consisting of one block and all the sequences.
+
+It should be noted that MOTOMAT can run out of memory if
+presented both with a lot of surviving blocks (35-50) and a low
+significance level relative to the total number of sequences (for
+example, SIGNIF around NUMSEQS/2). Generally it will run
+successfully by increasing the drop score, say from one standard
+deviation below the mean to none or to one above it, thereby
+dropping more lower-scoring blocks from consideration. If it runs
+out of memory, it will re-execute itself with a higher drop score
+until it succeeds.
+
+Finally, MOTOMAT creates a ".blk" output file for each block in
+the best path.  The file name consists of the first seven
+characters of the title after the ">" in the ".mot" file followed
+by a letter indicating the block's position in the path.  For
+example, suppose the title line put in the ".mot" file by MOTIFJ
+starts ">PS00094". Next, suppose MOTOMAT assembles seven blocks
+into the best path. Then seven ".blk" files are created and they
+are named "PS00094A.blk", "PS00094B.blk", ..., "PS00094H.blk".
+The ".blk" files output at this stage contain one line for each
+sequence in the best path, not necessarily one line for each
+sequence in the group. 
+
+Some special processing is done if any one of the blocks that
+survive after merging and applying the drop score is based on a
+motif that was repeated in the orginal MOTIFJ run. This can only
+occur if the duplicates parameter was non-zero. The critical
+significance level for assembling blocks is reduced by one
+quarter of the maximum number of repeated motifs in any of the
+surviving blocks, but it is never reduced below the majority of
+the sequences. For example, if there are 20 sequences the
+majority is 11. If the MOTIFJ significance level is 18 and the
+maxiumum number of repeats in a surviving block is 5, the
+critical number of sequences for block assembly is reduced to
+18 - 5/4 = 17. If the maxiumum number of repeats is 36, the
+critical number is reduced to 11 since 18 - 36/4 = 9 is less than
+the majority. The reason for reducing the significance stems from
+the number of ways to order two blocks: when a motif is repeated
+it cannot be determined which repeat is included in the block.
+
+If any of the blocks in the best path is built upon a motif that
+was repeated in the original MOTIFJ run, then a sequence is
+included in the best path regardless of the order in which the
+blocks occur in it, as long as those blocks do not overlap.
+
+The format of the the ".blk" file is similar to that of an entry
+in PROSITE.DAT. The first line starts with "ID" and contains the
+PROSITE ID line (if PROSITE was the origin of the proteins) and
+the word "BLOCK". The second line starts with "AC" and contains
+the PROSITE accession number. If the best path consists of more
+than one block, the AC ends with a letter indicating the order of
+the blocks in the path, e.g. "PS00028A".  The next line is a "DE"
+line with a description, then a "BL" line containing the MOTIFJ
+and MOTOMAT parameters used to make the block, followed by the
+block itself, one line per sequence. The last line consists of
+"//". If the block runs off either end of a sequence, the
+character "J" is used as a place holder.
+
+MOTOMAT also creates a ".plt" output file which contains the
+column scores of all the blocks in the best path for use by a
+general purpose plotting utility. We have not yet exploited the
+potential of this type of display which was suggested to us by
+Christian Burks.
+
+MOTIFJ executes MOTOMAT automatically, but MOTOMAT can be run
+independently with four optional command line arguments; the drop
+score is the number of standard deviations multiplied by 10, for
+example, -10 for 1.0 standard deviation below the mean or 15 for
+1.5 standard deviations above the mean:
+
+ motomat [motif-filename cutoff-column-score cluster-percent      
+          drop-sdev*10]
+
+By default, MOTOMAT runs interactively, but if it was started by
+a non-interactive version of MOTIFJ, or if all arguments are
+entered on the command line, it will trim all blocks non-
+interactively using the same parameters.
+For example,
+     motomat aractest.mot
+will run interactively, prompting for parameter values and
+allowing multiple tries at trimming each block, while
+     motomat aractest.mot 900 60 10
+will run non-interactively, trimming all blocks with a cutoff
+column score of 900, a cluster percent of 60 and a drop score of
+one standard deviation. To let MOTOMAT run non-interactively and
+find the best extended block, use the dummy of value of "1" for
+the cutoff column score:
+     motomat aractest.mot 1 >aractest.out5.  Calibrate blocks and create a database (MATODAT program).
+
+We have made a database of 1764 motif blocks using 437 groups of
+proteins from SWISS-PROT 18 listed PROSITE 7.00 pattern entries.
+This was done using the UNIX version of the PROTOMAT package,
+first executing PROTOMOT to create ".lis" files for all groups,
+followed by successive execution of UEXTRACT, MOTIFJ and MOTOMAT
+with default values for each. We then used each of the blocks as
+the query in a PATMAT matrix search against the SWISS-PROT
+database. The results of each search were evaluated to determine
+the rank of each sequence in the ".lis" file used to create the
+query block, including those fragment sequences not used in
+making the block, and the score of the 100th sequence not in the
+".lis" file. This score was used as an approximation to the score
+of a "spurious" match and added to the BL line of the block in
+the database of blocks. Now when PATMAT is used to search the
+blocks database using a protein or DNA sequence as query, it will
+compare the score of the query for each block with this score and
+report the ratio multiplied by 1000. So, a PATMAT score of 1000
+is considered un-interesting, while those above 1000 are worthy
+of further investigation.
+6.  Use the motif blocks for searching (PATMAT program).
+
+PATMAT can use the blocks output as ".blk" files in two different
+ways.  A single block can be specified as the basis of a scoring
+matrix and used to search a database of protein or DNA sequences
+(translated on-the-fly). In this case the block is the probe to
+be compared against a target database of sequences.
+
+Alternatively, a single protein or DNA sequence (translated on-
+the-fly) can be searched against a database of blocks, either the
+database provided with PROTOMAT, or one of the user's own making. 
+In this case, the sequence is the probe to be compared against
+the target database of blocks.
+
+If a probe sequence pulls out a block from the blocks database,
+one way to confirm the match is to use the block as a query
+matrix and search either a protein or DNA sequence target
+database and compare the query sequence score with the results.
+The PATMAT program allows you to extract a block from the blocks
+database so that it can be used as a matrix query. File Formats and Sample Files
+
+
+All files except the ".mot" files are ASCII text files. 
+
+
+Standard title.  All files except the ".pat" and ".blk" files
+have as their first line a title in a standard format, which is:
+
+>7 character AC;ID of 20 characters or less;description;data$
+
+
+Directory name.  When specifying a directory name in the ".lis"
+or ".lst" files, or for any of the programs, use the full
+directory name, including a final backslash (DOS) or slash
+(UNIX).  For example,
+
+     DOS:    c:\motif\pros\zinc\
+     UNIX:   /home/motif/pros/zinc/
+
+
+Setup file for MOTIFJ and MOTOMAT: protomat.stp. This file
+contains the name of a scoring matrix and the high pass filter
+value to use with it. The words "SCORE" and "HIGH" must be in
+capital letters starting in the first column.
+Sample file: protomat.stp
+Protomat Set-up File
+SCORE  d:\jorja\score.mat     Scoring matrix
+HIGH   3                      High pass score
+
+
+Scoring matrix for MOTIFJ and MOTOMAT. This file contains the
+actual scoring matrix. The first line of the file must list the
+alphabet which must include the 21 amino acids used by the
+programs. Values must be specified for the dummy amino acid "J"
+which is used to represent positions beyond either end of a
+sequence. The matrix is assumed to be symmetric and the file may
+include half or all of it.
+Sample file: score.mat
+ C  S  T  P  A  G  N  D  E  Q  H  R  K  M  I  L  V  F  Y  W  J
+11
+ 2  8
+ 2  6  8
+ 3  5  5  8
+ 2  4  4  5  7
+ 2  4  5  5  4  7
+ 3  4  4  1  1  1  9
+ 2  4  4  1  0  0  4  8
+ 2  4  4  1  0  0  5  6  7
+ 3  4  4  1  0  1  4  4  6  8
+ 3  5  5  2  1  1  5  5  4  5 10
+ 2  4  4  1  0  0  4  4  4  5  5  8
+ 2  4  4  1  0  1  4  4  5  5  6  6  8
+ 6  1  2  2  1  1  2  1  1  2  2  1  2  9
+ 5  1  1  1  0  0  1  1  1  1  2  1  1  5  8
+ 5  0  0  1  0  0  1  0  0  0  1  0  0  6  5  7
+ 5  1  1  1  0  0  1  1  0  1  1  0  1  5  6  4  7
+ 6  1  1  2  1  1  2  1  1  1  2  1  1  5  4  4  4  9
+ 6  2  2  2  1  1  2  1  1  2  2  1  2  5  4  4  4  7  9
+ 7  2  2  3  2  2  3  2  2  3  3  2  2  6  5  5  5  8  8 11
+ 3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  0
+
+
+
+Pattern file (".pat").  The file contains one line, which is an
+amino acid pattern in PROSITE format.
+Sample File:  PS00120.pat
+[LIV]-x-[LIVFY]-[LIV]-G-[HY]-S-x-G.
+
+
+Sequence list file (".lis", ".lst").  The first line of the file
+is a standard title, and the second is a directory name.  Each
+subsequent line contains the name of a single sequence (ID for
+EMBL format, LOCUS for GENBANK).
+Sample File:  PS00120.lis
+>PS00120 ;LIPASE_SER;Lipases, serine active site.;;$
+C:\MOTIF\pros\PS00120\
+LIP$PSEFR
+LIP$STAAU
+LIP$STAHY
+LIPG$HUMAN
+LIPG$RAT
+LIPH$HUMAN
+LIPH$RAT
+LIPL$BOVIN
+LIPL$CAVPO
+LIPL$CHICK
+LIPL$HUMAN
+LIPL$MOUSE
+LIPP$CANFA
+LIPP$HUMAN
+LIPP$PIG
+LCAT$HUMAN
+
+
+Sequence file (".pro"). The first line of the file is a standard
+title.  Subsequent lines contain the sequence, starting in the
+left-most column, exactly as it was extracted from the database. 
+The final line contains an asterisk.
+Sample File: c:\motif\pros\PS00120\lcat$human.pro
+>LCAT%HUMAN ACYLTRANSFERASE) (GENE NAME: LCAT). $
+MGPPGSPWQW VTLLLGLLLP PAAPFWLLNV LFPPHTTPKA ELSNHTRPVI LVPGCLGNQL
+EAKLDKPDVV NWMCYRKTED FFTIWLDLNM FLPLGVDCWI DNTRVVYNRS SGLVSNAPGV
+QIRVPGFGKT YSVEYLDSSK LAGYLHTLVQ NLVNNGYVRD ETVRAAPYDW RLEPGQQEEY
+YRKLAGLVEE MHAAYGKPVF LIGHSLGCLH LLYFLLRQPQ AWKDRFIDGF ISLGAPWGGS
+IKPMLVLASG DNQGIPIMSS IKLKEEQRIT TTSPWMFPSR MAWPEDHVFI STPSFNYTGR
+DFQRFFADLH FEEGWYMWLQ SRDLLAGLPA PGVEVYCLYG VGLPTPRTYI YDHGFPYTDP
+VGVLYEDGDD TVATRSTELC GLWQGRQPQP VHLLPLHGIQ HLNMVFSNLT LEHINAILLG
+AYRQGPPASP TASPEPPPPE
+*
+
+
+Motif file (".mot"). This is a binary file containing the results
+of a run of the MOTIFJ program.
+
+
+Block file (".blk").  The format of this file is similar to
+PROSITE.DAT.  The ID line contains the PROSITE ID, plus the word
+"BLOCK". The AC line contains the PROSITE AC, followed by a
+letter indicating the order of the block in the best path.  For
+example, the first block is "A", the second "B", etc. Also on
+this line is the range of distances among the sequences from the
+previous block, or from the beginning of the sequence for the
+first block. The DE line contains the PROSITE DE. The BL line
+contains information about creation of the block; from MOTIFJ,
+the three amino acid motif and the program parameters; from
+MOTOMAT the program parameters and final block width. The // line
+terminates the file.
+Sample File:  PS00120_GYS.blk
+ID   LIPASE_SER; BLOCK
+AC   PS00120B; distance from previous block=(10,61)
+DE   Lipases, serine active site.
+BL   GYS motif=[8,0,2]; motomat=[1,80,-10] width=19
+  LIPP$CAN  (0163)  QVQLIGHSLGAHVAGEAGS
+
+  LIPH$HUM  (0160)  HVHLIGYSLGAHVSGFAGS
+  LIPH$RAT  (0161)  KVHLIGYSLGAHVSGFAGS
+
+  LIPL$BOV  (0141)  NVHLLGYSLGAHAAGIAGS
+  LIPL$CAV  (0141)  NVHLLGYSLGAHAAGVAGS
+  LIPL$CHI  (0151)  NVHLLGYSLGAHAAGIAGS
+  LIPL$HUM  (0151)  NVHLLGYSLGAHAAGIAGS
+  LIPL$MOU  (0143)  NVHLLGYSLGAHAAGVAGS
+
+  LIPP$HUM  (0161)  NVHVIGHSLGAHAAGEAGR
+//
+
+Plotting file (".plt"). This file contains two space-delimited
+columns of numbers for plotting. The first column contains the x-
+coordinate values, which are amino acid positions. The second
+columns contains the y-coordinate values, which are the column
+score values for all the blocks. The maximum distance between
+blocks for all sequences in it is used and the y-values are set
+to zero between blocks.

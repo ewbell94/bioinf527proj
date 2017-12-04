@@ -1,0 +1,16 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <global.h>
+#include <errors.h>
+#include <memory.h>
+#include <residues.h>
+#include <blocks.h>
+#include <matrix.h>
+#include <sequences.h>
+#include <aabet.h>
+#include <ntbet.h>
+#include <strutil.h>
+#include <convert.h>
+#include <frequency.h>
